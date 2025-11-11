@@ -1,0 +1,44 @@
+# Newcastle Synthetic Population Pipeline Configuration
+
+# Project paths
+project_root: "/home/michael/NewcastlePopulation"
+
+# Data directories
+data:
+  raw: "data/raw"
+  processed: "data/processed" 
+  outputs: "data/outputs"
+
+# Output structure by pipeline stage
+outputs:
+  preprocessing:
+    dir: "01_preprocessing"
+    description: "Cleaned census data and processed microdata"
+  generation:
+    dir: "02_generation"
+    description: "Synthetic population generation results"
+  validation:
+    dir: "03_validation"
+    description: "Validation plots and metrics"
+  daily_routine:
+    dir: "04_daily_routine"
+    description: "Activity and trip analysis"
+
+# File naming conventions
+naming:
+  timestamp_format: "%Y%m%d_%H%M%S"
+  use_timestamps: true
+  
+# MLfit algorithm parameters
+mlfit:
+  algorithm_fit: "ipu"
+  algorithm_replicate: "trs"
+  max_iterations: 5000
+  verbose: true
+  
+# Output preferences
+output_preferences:
+  consolidated_population: true  # Single CSV instead of per-OA files
+  save_model_objects: false     # Skip .rds files unless needed for debugging
+  save_control_copies: false    # Don't duplicate processed control files
+  include_metadata: true        # Save run parameters and timestamps

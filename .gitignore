@@ -20,6 +20,7 @@
 
 # RStudio files
 .Rproj.user/
+*.Rproj
 
 # produced vignettes
 vignettes/*.html
@@ -47,3 +48,29 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+
+# Large data files
+data/
+*.csv
+*.xlsx
+*.xls
+*.rds
+*.RData
+*.rda
+*.feather
+*.parquet
+*.zip
+*.gz
+*.tar
+*.7z
+*.sql
+*.db
+*.sqlite
+*.h5
+*.hdf5
+*.nc
+*.mat
+*.tab
+
+.venv/
+.vscode/

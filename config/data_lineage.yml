@@ -1,0 +1,62 @@
+# Data Lineage Tracking for Newcastle Population Pipeline
+# This file tracks input-output relationships between pipeline stages
+
+stages:
+  preprocessing:
+    stage_01_convert_census:
+      script: "scripts/01_preprocessing/convert_census_data.R"
+      inputs:
+        - "data/raw/hh_adults_and_children_11a.csv"
+        - "data/raw/hh_size_9a.csv" 
+        - "data/raw/ns_sec_10a.csv"
+        - "data/raw/number_of_cars_5a.csv"
+        - "data/raw/resident_age_6a.csv"
+        - "data/raw/sex.csv"
+      outputs:
+        - "data/processed/hh_adults_and_children_8m.csv"
+        - "data/processed/hh_size_9a.csv"
+        - "data/processed/ns_sec_10a.csv" 
+        - "data/processed/number_of_cars_5a.csv"
+        - "data/processed/resident_age_6a.csv"
+        - "data/processed/sex.csv"
+    
+    stage_01_microdata:
+      script: "scripts/01_preprocessing/preprocess_microdata.R"
+      inputs:
+        - "data/raw/microdata.tab"
+      outputs:
+        - "data/processed/microdata.tab"
+
+  generation:
+    stage_02_mlfit:
+      script: "scripts/02_generation/newcastle_mlfit.R"
+      inputs:
+        - "data/processed/microdata.tab"
+        - "data/processed/sex.csv"
+        - "data/processed/hh_adults_and_children_8m.csv"
+        - "data/processed/hh_size_9a.csv"
+        - "data/processed/ns_sec_10a.csv"
+        - "data/processed/number_of_cars_5a.csv"
+        - "data/processed/resident_age_6a.csv"
+      outputs:
+        - "data/outputs/02_generation/synthetic_population_TIMESTAMP.csv"
+        - "data/outputs/02_generation/generation_metadata_TIMESTAMP.yml"
+
+  validation:
+    stage_03_validation:
+      script: "scripts/03_validation/newcastle_analysis.R"
+      inputs:
+        - "data/outputs/02_generation/synthetic_population_TIMESTAMP.csv"
+        - "data/processed/*.csv"  # control files for comparison
+      outputs:
+        - "data/outputs/03_validation/validation_plots_TIMESTAMP/"
+        - "data/outputs/03_validation/validation_metrics_TIMESTAMP.csv"
+
+  daily_routine:
+    stage_04_trips:
+      script: "scripts/04_daily_routine/robust_full_dataset_analysis.R" 
+      inputs:
+        - "data/outputs/02_generation/synthetic_population_TIMESTAMP.csv"
+        - "/home/michael/NewcastlePopulationData/trip.tab"  # external large dataset
+      outputs:
+        - "data/outputs/04_daily_routine/trip_analysis_TIMESTAMP.csv"
