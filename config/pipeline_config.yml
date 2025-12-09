@@ -42,3 +42,19 @@ output_preferences:
   save_model_objects: false     # Skip .rds files unless needed for debugging
   save_control_copies: false    # Don't duplicate processed control files
   include_metadata: true        # Save run parameters and timestamps
+
+# Location assignment parameters
+location_assignment:
+  cache_boundaries: true        # Save OA boundaries locally for reuse
+  use_local_boundaries: true    # Prefer local boundaries over API
+  osm_building_types:           # OSM building types to query for homes
+    - "residential"
+    - "house"
+    - "detached"
+    - "semidetached_house"
+    - "terrace"
+    - "apartments"
+    - "bungalow"
+  fallback_to_centroid: true    # Use OA centroid if no buildings found
+  api_delay_seconds: 1          # Delay between OSM API calls
+  coordinate_system: "EPSG:4326" # WGS84 lat/long
